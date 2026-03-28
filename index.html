@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>GRR SHOP -</title>
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&display=swap" rel="stylesheet">
+<style>
+* { margin:0; padding:0; box-sizing:border-box; }
+body, html { height:100%; font-family:'Orbitron', sans-serif; color:#fff; overflow-x:hidden; }
+.video-bg { position:fixed; top:0; left:0; width:100%; height:100%; object-fit:cover; z-index:-1; filter:brightness(0.75); }
+.particles { position:fixed; width:100%; height:100%; top:0; left:0; pointer-events:none; z-index:0; }
+.particle { position:absolute; border-radius:50%; background:#ffd700; opacity:0.4; animation:move 15s linear infinite; }
+@keyframes move { 0% { transform:translateY(0) translateX(0);} 100% { transform:translateY(-110vh) translateX(50vw);} }
+
+header { display:flex; justify-content:space-between; align-items:center; padding:15px 30px; position:sticky; top:0; z-index:10; background:rgba(0,0,0,0.5); }
+.logo { font-size:2em; font-weight:700; }
+.logo-grr { color:#ffd700; } .logo-shop { color:#a855f7; }
+nav { display:flex; gap:15px; }
+nav button { background:rgba(255,255,255,0.1); border:none; color:#fff; padding:10px 20px; border-radius:12px; cursor:pointer; font-weight:600; transition:0.3s; }
+nav button:hover { background:#a855f7; }
+.cart-btn { position:relative; background:#000; border:none; padding:10px 15px; border-radius:12px; cursor:pointer; font-weight:700; color:#fff; }
+.cart-count { position:absolute; top:-8px; right:-8px; background:#ffd700; color:#000; border-radius:50%; width:20px; height:20px; font-size:12px; display:flex; align-items:center; justify-content:center; font-weight:700; }
+
+section { padding:60px 20px; max-width:1200px; margin:0 auto; z-index:2; position:relative; display:none; }
+section.active { display:block; }
+.section-title { font-size:2.5em; margin-bottom:30px; color:#ffd700; text-shadow:0 0 10px #ffd700; }
+.products-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(150px,1fr)); gap:20px; max-height:70vh; overflow-y:auto; }
+.product-card { background:rgba(255,255,255,0.1); border-radius:16px; padding:15px; text-align:center; transition:0.3s; position:relative; }
+.product-card:hover { background:rgba(168,85,247,0.4); transform:translateY(-5px);}
+.product-card img { width:100%; border-radius:12px; margin-bottom:10px; }
+.product-name { font-size:1.1em; font-weight:700; color:#fff; }
+.product-price { color:#ffd700; font-weight:600; }
+.quantity-controls { display:flex; justify-content:center; align-items:center; gap:10px; margin-top:8px; }
+.quantity-controls button { padding:4px 8px; border:none; border-radius:8px; font-weight:700; cursor:pointer; background:#ffd700; color:#000; }
+.add-cart { margin-top:10px; background:#a855f7; color:#fff; border:none; padding:5px 10px; border-radius:8px; cursor:pointer; font-weight:700; }
+
+.back-btn { margin-bottom:30px; background:#a855f7; border:none; padding:10px 25px; border-radius:12px; cursor:pointer; font-weight:700; color:#fff; }
+.discord-btn { margin-top:20px; background:#5865f2; border:none; padding:12px 25px; border-radius:12px; cursor:pointer; font-weight:700; color:#fff; font-size:1em; display:flex; align-items:center; gap:10px; }
+
+footer { padding:20px 30px; text-align:center; background:rgba(0,0,0,0.8); color:#fff; margin-top:50px; }
+footer .logo { font-weight:700; font-size:1.5em; margin-bottom:10px; }
+footer .copyright { font-size:0.85em; color:#aaa; margin-top:8px; }
+footer .creator { font-size:0.75em; color:#ccc; margin-top:4px; }
+
+@media(max-width:768px){ .section-title { font-size:2em; } nav { flex-direction:column; gap:10px; margin-bottom:30px;} }
+
+.cart-menu{ position:absolute; top:50px; right:0; background:#000; border:2px solid #ffd700; border-radius:12px; padding:15px; display:none; flex-direction:column; width:250px; z-index:20; }
+.cart-menu button{ margin-top:10px; }
+
+</style>
+</head>
+<body>
+
+<video class="video-bg" autoplay muted loop>
+    <source src="video/fondo.mp4" type="video/mp4">
+</video>
+
+<div class="particles" id="particles"></div>
+
+<header>
+    <div class="logo"><span class="logo-grr">GRR</span><span class="logo-shop">SHOP</span></div>
+    <div style="display:flex; gap:15px; align-items:center;">
+        <nav>
+            <button onclick="showSection('inicio')">Inicio</button>
+            <button onclick="showSection('pvp')">Nesteds PVP</button>
+            <button onclick="showSection('build')">Nesteds Build</button>
+            <button onclick="showSection('personalizado')">Pedidos Personalizados</button>
+            <button onclick="showSection('cracked')">Servicios Cracked</button>
+        </nav>
+        <div style="position:relative;">
+            <button class="cart-btn">🛒 <span class="cart-count" id="cartCount">0</span></button>
+            <div class="cart-menu" id="cartMenu">
+                <button id="checkoutBtn">Finalizar compra</button>
+                <button id="cancelBtn">Cancelar compra</button>
+            </div>
+        </div>
+    </div>
+</header>
+
+<section id="inicio" class="active">
+    <h1 class="section-title">Bienvenido a GRR SHOP</h1>
+    <p style="color:#a855f7; font-size:1.2em;">Encuentra los mejores Nesteds PVP y Build, con estilo y calidad profesional.</p>
+    <button class="discord-btn" onclick="window.open('https://discord.gg/U97ygDUm','_blank')">💬 Únete al Discord de la tienda</button>
+    <input type="text" id="discordUser" placeholder="Escribe tu usuario de Discord"
+    style="padding:10px;border-radius:10px;border:none;margin-top:15px;width:250px;">
+</section>
+
+<section id="pvp">
+    <button class="back-btn" onclick="showSection('inicio')">← Volver al inicio</button>
+    <h2 class="section-title">Nesteds PVP</h2>
+    <div class="products-grid" id="pvpGrid"></div>
+</section>
+
+<section id="build">
+    <button class="back-btn" onclick="showSection('inicio')">← Volver al inicio</button>
+    <h2 class="section-title">Nesteds Build</h2>
+    <div class="products-grid" id="buildGrid"></div>
+</section>
+
+<section id="personalizado">
+    <button class="back-btn" onclick="showSection('inicio')">← Volver al inicio</button>
+    <h2 class="section-title">Pedidos Personalizados</h2>
+    <p style="margin-bottom:20px;">
+    ## Half Of Chest Nesteds - 27 Nesteds - $4 <br>
+    ## A Dub Nested - 54 Nesteds - $2 <br>
+    ## 5 Dubs Of Nested - $5 <br>
+    ## 10 Dubs Of Nested - $10 <br>
+    ## 15 Dubs Nested - $15 <br>
+    ## 20 Dubs Nesteds random - $20 <br>
+    ## 25 Dubs Nesteds - $25 <br>
+    ## 30 Dubs Nesteds random - $30 <br>
+    ## 40 Dubs Nesteds - $40 <br>
+    ## You Can Custom What Kind Of Nested You Want
+    </p>
+    <div class="products-grid" id="personalizadoGrid"></div>
+</section>
+
+<section id="cracked">
+    <button class="back-btn" onclick="showSection('inicio')">← Volver al inicio</button>
+    <h2 class="section-title">Servicios Cracked</h2>
+    <textarea id="crackedMsg" placeholder="Escribe lo que quieres pedir..."
+    style="width:100%;height:100px;border-radius:10px;padding:10px;"></textarea>
+    <button class="add-cart" onclick="sendCracked()">Enviar al dueño</button>
+</section>
+
+<footer>
+    <div class="logo">GRRSHOP</div>
+    <div class="copyright">© 2026 GRR SHOP. Todos los derechos reservados.</div>
+    <div class="creator">Creado por JAP4 MC</div>
+</footer>
+
+<script>
+function showSection(id){
+    document.querySelectorAll('section').forEach(sec=>sec.classList.remove('active'));
+    document.getElementById(id).classList.add('active');
+}
+
+// Partículas
+const particlesContainer = document.getElementById('particles');
+for(let i=0;i<60;i++){
+    const p=document.createElement('div');
+    p.className='particle';
+    p.style.left=Math.random()*100+'%';
+    p.style.top=Math.random()*100+'%';
+    p.style.width=3+Math.random()*5+'px';
+    p.style.height=p.style.width;
+    p.style.animationDuration=10+Math.random()*10+'s';
+    particlesContainer.appendChild(p);
+}
+
+// Productos
+const cartCount = document.getElementById('cartCount');
+const cartMenu = document.getElementById('cartMenu');
+const checkoutBtn = document.getElementById('checkoutBtn');
+const cancelBtn = document.getElementById('cancelBtn');
+let cart = [];
+
+function createProducts(gridId, count, folder, prefix){
+    const grid = document.getElementById(gridId);
+    for(let i=1;i<=count;i++){
+        const product = {name:prefix+' '+i, price:'$0.03', quantity:0};
+        const card = document.createElement('div');
+        card.className='product-card';
+        card.innerHTML = `
+            <img src="imagenes/${folder}/${folder==='pvp'?'imagen'+i:i}.jpg" alt="${product.name}">
+            <div class="product-name">${product.name}</div>
+            <div class="product-price">${product.price}</div>
+            <div class="quantity-controls">
+                <button class="minus">-</button>
+                <span class="qty">0</span>
+                <button class="plus">+</button>
+            </div>
+            <button class="add-cart">Añadir al carrito</button>
+        `;
+        const qtyEl = card.querySelector('.qty');
+        card.querySelector('.plus').addEventListener('click',()=>{product.quantity++; qtyEl.innerText=product.quantity;});
+        card.querySelector('.minus').addEventListener('click',()=>{if(product.quantity>0){product.quantity--; qtyEl.innerText=product.quantity;}});
+        card.querySelector('.add-cart').addEventListener('click',()=>{
+            if(product.quantity>0){
+                const existing = cart.find(p=>p.name===product.name);
+                if(existing) existing.quantity += product.quantity; else cart.push({...product});
+                updateCartMenu();
+                updateCartCount();
+                product.quantity=0; qtyEl.innerText=0;
+            }
+        });
+        grid.appendChild(card);
+    }
+}
+
+createProducts('pvpGrid',20,'pvp','PVP');
+createProducts('buildGrid',20,'build','Build');
+
+// Pedidos personalizados
+const personalizadoItems = [
+    {name:"Half Chest",price:4,quantity:0},
+    {name:"1 Dub",price:2,quantity:0},
+    {name:"5 Dubs",price:5,quantity:0},
+    {name:"10 Dubs",price:10,quantity:0},
+    {name:"15 Dubs",price:15,quantity:0},
+    {name:"20 Dubs",price:20,quantity:0},
+    {name:"25 Dubs",price:25,quantity:0},
+    {name:"30 Dubs",price:30,quantity:0},
+    {name:"40 Dubs",price:40,quantity:0}
+];
+const gridPersonalizado=document.getElementById("personalizadoGrid");
+personalizadoItems.forEach(item=>{
+    const card=document.createElement("div");
+    card.className="product-card";
+    card.innerHTML=`
+        <div class="product-name">${item.name}</div>
+        <div class="product-price">$${item.price}</div>
+        <div class="quantity-controls">
+            <button>-</button>
+            <span>0</span>
+            <button>+</button>
+        </div>
+        <button class="add-cart">Añadir al carrito</button>
+    `;
+    const qty = card.querySelector("span");
+    const btns = card.querySelectorAll(".quantity-controls button");
+    const addBtn = card.querySelector(".add-cart");
+    btns[0].onclick=()=>{if(item.quantity>0){item.quantity--; qty.innerText=item.quantity;}};
+    btns[1].onclick=()=>{item.quantity++; qty.innerText=item.quantity;};
+    addBtn.onclick=()=>{
+        if(item.quantity>0){
+            const existing = cart.find(p=>p.name===item.name);
+            if(existing) existing.quantity+=item.quantity; else cart.push({...item});
+            updateCartMenu();
+            updateCartCount();
+            item.quantity=0;
+            qty.innerText=0;
+        }
+    };
+    gridPersonalizado.appendChild(card);
+});
+
+// Cart menu
+document.querySelector(".cart-btn").addEventListener("click",()=>{cartMenu.style.display=cartMenu.style.display==="flex"?"none":"flex";});
+cancelBtn.onclick=()=>{cart=[]; updateCartMenu(); updateCartCount(); cartMenu.style.display="none";};
+
+function updateCartMenu(){
+    cartMenu.innerHTML=`<button id="checkoutBtn">Finalizar compra</button><button id="cancelBtn">Cancelar compra</button>`;
+    const checkoutBtn=document.getElementById("checkoutBtn");
+    const cancelBtn=document.getElementById("cancelBtn");
+    checkoutBtn.onclick=checkout;
+    cancelBtn.onclick=()=>{cart=[]; updateCartMenu(); updateCartCount(); cartMenu.style.display="none";};
+}
+
+function updateCartCount(){cartCount.innerText=cart.reduce((a,b)=>a+b.quantity,0);}
+
+// Webhook URL
+const webhookUrl="https://discordapp.com/api/webhooks/1487339182903787601/v7Nsrmby5baEuh2fwQBrYp9o1OMAxGxIjpa6yOb7Ieg17kKhqrcRSr0CPaT_8Ro67tR3";
+
+function checkout(){
+    if(cart.length===0){alert("Carrito vacío"); return;}
+    const user=document.getElementById("discordUser").value || "Usuario";
+    let msg=`🛒 Pedido GRR SHOP\nUsuario: ${user}\n`;
+    cart.forEach(p=>{msg+=`${p.name} x${p.quantity}\n`;});
+    msg+=`Estado: Pendiente\n<@1315823364962521112>`;
+    fetch(webhookUrl,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({content:msg})});
+    alert("Pedido enviado");
+    cart=[];
+    updateCartMenu();
+    updateCartCount();
+}
+
+// Servicios Cracked
+function sendCracked(){
+    const msg=document.getElementById("crackedMsg").value;
+    const user=document.getElementById("discordUser").value || "Usuario";
+    if(!msg) return alert("Escribe algo");
+    fetch(webhookUrl,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({content:`💻 Servicio Cracked\nUsuario: ${user}\nMensaje: ${msg}\n<@1315823364962521112>`})});
+    alert("Enviado al dueño");
+}
+</script>
+
+</body>
+</html>
